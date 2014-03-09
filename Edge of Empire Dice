@@ -7,6 +7,7 @@
 // dice graphics hosted by Roll20 user Alicia G. at galacticcampaigns.com
 // dice graphics borrowed from the awesome google+ hangouts EotE Dice App
 // changed to randomInteger()
+// added by Jarod: option to have the dice log on one line only (set eedGlobal.diceLogOnOneLine to false to restore old way)
 //
 // !eed log on|off  // outputs dice rolled to the chat window if "on", nothing if "off"
 // !eed graphics on|off|s|m|l  //shows dice rolled as graphic, small, medium, or large if "on" or as text if "off"
@@ -99,7 +100,8 @@ var eedGlobal = {
 	diceTextResultLog : "",
 	diceGraphicResult : "",
 	diceGraphicResultLog : "",
-	diceTestEnabled : false
+	diceTestEnabled : false,
+    diceLogOnOneLine : true
 };
 
 function rollBoost(diceQty, who){
@@ -135,46 +137,47 @@ function rollBoost(diceQty, who){
 	}
 	
 	for (i=1;i<=diceQty;i++) {
-	if (eedGlobal.diceTestEnabled === true) {
-		roll = roll + 1;
-	}
-	else {
-		roll = randomInteger(6);
+        if (eedGlobal.diceTestEnabled === true) {
+            roll = roll + 1;
+        }
+        else {
+            roll = randomInteger(6);
+        }
+
+        switch(roll) {
+            case 1:
+                diceTextLog = diceTextLog + "(Blank)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.BLANK + s2 + "Boost Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                break;
+            case 2:
+                diceTextLog = diceTextLog + "(Blank)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.BLANK + s2 + "Boost Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                break;
+            case 3:
+                diceTextLog = diceTextLog + "(Success)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.S + s2 + "Boost Success" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 1;
+                break;
+            case 4:
+                diceTextLog = diceTextLog + "(Advantage)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.A + s2 + "Boost Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.advantage = diceResult.advantage + 1;
+                break;
+            case 5:
+                diceTextLog = diceTextLog + "(Advantage x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.AA + s2 + "Boost Advantage x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.advantage = diceResult.advantage + 2;
+                break;
+            case 6:
+                diceTextLog = diceTextLog + "(Success + Advantage)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.SA + s2 + "Boost Success + Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 1;
+                diceResult.advantage = diceResult.advantage + 1;
+                break;
+        }
 	}
 
-	switch(roll) {
-        case 1:
-			diceTextLog = diceTextLog + "(Blank)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.BLANK + s2 + "Boost Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			break;
-		case 2:
-			diceTextLog = diceTextLog + "(Blank)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.BLANK + s2 + "Boost Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			break;
-		case 3:
-			diceTextLog = diceTextLog + "(Success)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.S + s2 + "Boost Success" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 1;
-			break;
-		case 4:
-			diceTextLog = diceTextLog + "(Advantage)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.A + s2 + "Boost Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.advantage = diceResult.advantage + 1;
-			break;
-		case 5:
-			diceTextLog = diceTextLog + "(Advantage x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.AA + s2 + "Boost Advantage x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.advantage = diceResult.advantage + 2;
-			break;
-		case 6:
-			diceTextLog = diceTextLog + "(Success + Advantage)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.BOOST.SA + s2 + "Boost Success + Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 1;
-			diceResult.advantage = diceResult.advantage + 1;
-			break;
-    }
-	}
-	if (eedGlobal.diceLogChat === true) {
+	if (eedGlobal.diceLogChat === true && eedGlobal.diceLogOnOneLine === false) {
 		if (eedGlobal.diceGraphicsChat === true && eedGlobal.diceLogChatWhisper === false) {
 			sendChat("", "/direct " + diceGraphicsLog);
 		}
@@ -188,7 +191,7 @@ function rollBoost(diceQty, who){
 			}
 		}
 	}
-	return diceResult;
+	return [diceResult, diceTextLog, diceGraphicsLog];
 }
 
 function rollAbility(diceQty, who){
@@ -226,57 +229,58 @@ function rollAbility(diceQty, who){
 	}
 	
 	for (i=1;i<=diceQty;i++) {
-	if (eedGlobal.diceTestEnabled === true) {
-		roll = roll + 1;
+        if (eedGlobal.diceTestEnabled === true) {
+            roll = roll + 1;
+        }
+        else {
+            roll = randomInteger(8);
+        }
+        
+        switch(roll) {
+            case 1:
+                diceTextLog = diceTextLog + "(Blank)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.BLANK + s2 + "Ability Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                break;
+            case 2:
+                diceTextLog = diceTextLog + "(Success)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.S + s2 + "Ability Success" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 1;
+                break;
+            case 3:
+                diceTextLog = diceTextLog + "(Success)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.S + s2 + "Ability Success" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 1;
+                break;
+            case 4:
+                diceTextLog = diceTextLog + "(Advantage)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.A + s2 + "Ability Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.advantage = diceResult.advantage + 1;
+                break;
+            case 5:
+                diceTextLog = diceTextLog + "(Advantage)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.A + s2 + "Ability Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.advantage = diceResult.advantage + 1;
+                break;
+            case 6:
+                diceTextLog = diceTextLog + "(Success + Advantage)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.SA + s2 + "Ability Success + Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 1;
+                diceResult.advantage = diceResult.advantage + 1;
+                break;
+            case 7:
+                diceTextLog = diceTextLog + "(Advantage x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.AA + s2 + "Ability Advantage x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.advantage = diceResult.advantage + 2;
+                break;
+            case 8:
+                diceTextLog = diceTextLog + "(Success x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.SS + s2 + "Ability Success x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 2;
+                break;
+        }
 	}
-	else {
-		roll = randomInteger(8);
-	}
-	
-	switch(roll) {
-        case 1:
-			diceTextLog = diceTextLog + "(Blank)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.BLANK + s2 + "Ability Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			break;
-		case 2:
-			diceTextLog = diceTextLog + "(Success)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.S + s2 + "Ability Success" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 1;
-			break;
-		case 3:
-			diceTextLog = diceTextLog + "(Success)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.S + s2 + "Ability Success" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 1;
-			break;
-		case 4:
-			diceTextLog = diceTextLog + "(Advantage)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.A + s2 + "Ability Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.advantage = diceResult.advantage + 1;
-			break;
-		case 5:
-			diceTextLog = diceTextLog + "(Advantage)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.A + s2 + "Ability Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.advantage = diceResult.advantage + 1;
-			break;
-		case 6:
-			diceTextLog = diceTextLog + "(Success + Advantage)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.SA + s2 + "Ability Success + Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 1;
-			diceResult.advantage = diceResult.advantage + 1;
-			break;
-		case 7:
-			diceTextLog = diceTextLog + "(Advantage x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.AA + s2 + "Ability Advantage x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.advantage = diceResult.advantage + 2;
-			break;
-		case 8:
-			diceTextLog = diceTextLog + "(Success x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.ABILITY.SS + s2 + "Ability Success x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 2;
-			break;
-    }
-	}
-	if (eedGlobal.diceLogChat === true) {
+
+	if (eedGlobal.diceLogChat === true && eedGlobal.diceLogOnOneLine === false) {
 		if (eedGlobal.diceGraphicsChat === true && eedGlobal.diceLogChatWhisper === false) {
 			sendChat("", "/direct " + diceGraphicsLog);
 		}
@@ -290,7 +294,7 @@ function rollAbility(diceQty, who){
 			}
 		}
 	}
-	return diceResult;
+	return [diceResult, diceTextLog, diceGraphicsLog];
 }
 
 function rollProficiency(diceQty, who){
@@ -332,80 +336,80 @@ function rollProficiency(diceQty, who){
 	}
 	
 	for (i=1;i<=diceQty;i++) {
-	if (eedGlobal.diceTestEnabled === true) {
-		roll = roll + 1;
-	}
-	else {
-		roll = randomInteger(12);
-	}
+        if (eedGlobal.diceTestEnabled === true) {
+            roll = roll + 1;
+        }
+        else {
+            roll = randomInteger(12);
+        }
 
-	switch(roll) {
-        case 1:
-			diceTextLog = diceTextLog + "(Blank)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.BLANK + s2 + "Proficiency Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			break;
-		case 2:
-			diceTextLog = diceTextLog + "(Triumph(+Success))";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.TRIUMPH + s2 + "Proficiency Triumph(+Success)" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.triumph = diceResult.triumph + 1;
-			diceResult.success = diceResult.success + 1;
-			break;
-		case 3:
-			diceTextLog = diceTextLog + "(Success)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.S + s2 + "Proficiency Success" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 1;
-			break;
-		case 4:
-			diceTextLog = diceTextLog + "(Success)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.S + s2 + "Proficiency Success" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 1;
-			break;
-		case 5:
-			diceTextLog = diceTextLog + "(Advantage)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.A + s2 + "Proficiency Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.advantage = diceResult.advantage + 1;
-			break;
-		case 6:
-			diceTextLog = diceTextLog + "(Success + Advantage)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.SA + s2 + "Proficiency Success + Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 1;
-			diceResult.advantage = diceResult.advantage + 1;
-			break;
-		case 7:
-			diceTextLog = diceTextLog + "(Success + Advantage)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.SA + s2 + "Proficiency Success + Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 1;
-			diceResult.advantage = diceResult.advantage + 1;
-			break;
-		case 8:
-			diceTextLog = diceTextLog + "(Success + Advantage)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.SA + s2 + "Proficiency Success + Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 1;
-			diceResult.advantage = diceResult.advantage + 1;
-			break;
-		case 9:
-			diceTextLog = diceTextLog + "(Success x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.SS + s2 + "Proficiency Success x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 2;
-			break;
-		case 10:
-			diceTextLog = diceTextLog + "(Success x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.SS + s2 + "Proficiency Success x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.success = diceResult.success + 2;
-			break;
-		case 11:
-			diceTextLog = diceTextLog + "(Advantage x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.AA + s2 + "Proficiency Advantage x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.advantage = diceResult.advantage + 2;
-			break;
-		case 12:
-			diceTextLog = diceTextLog + "(Advantage x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.AA + s2 + "Proficiency Advantage x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.advantage = diceResult.advantage + 2;
-			break;
-    }
+        switch(roll) {
+            case 1:
+                diceTextLog = diceTextLog + "(Blank)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.BLANK + s2 + "Proficiency Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                break;
+            case 2:
+                diceTextLog = diceTextLog + "(Triumph(+Success))";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.TRIUMPH + s2 + "Proficiency Triumph(+Success)" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.triumph = diceResult.triumph + 1;
+                diceResult.success = diceResult.success + 1;
+                break;
+            case 3:
+                diceTextLog = diceTextLog + "(Success)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.S + s2 + "Proficiency Success" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 1;
+                break;
+            case 4:
+                diceTextLog = diceTextLog + "(Success)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.S + s2 + "Proficiency Success" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 1;
+                break;
+            case 5:
+                diceTextLog = diceTextLog + "(Advantage)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.A + s2 + "Proficiency Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.advantage = diceResult.advantage + 1;
+                break;
+            case 6:
+                diceTextLog = diceTextLog + "(Success + Advantage)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.SA + s2 + "Proficiency Success + Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 1;
+                diceResult.advantage = diceResult.advantage + 1;
+                break;
+            case 7:
+                diceTextLog = diceTextLog + "(Success + Advantage)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.SA + s2 + "Proficiency Success + Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 1;
+                diceResult.advantage = diceResult.advantage + 1;
+                break;
+            case 8:
+                diceTextLog = diceTextLog + "(Success + Advantage)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.SA + s2 + "Proficiency Success + Advantage" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 1;
+                diceResult.advantage = diceResult.advantage + 1;
+                break;
+            case 9:
+                diceTextLog = diceTextLog + "(Success x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.SS + s2 + "Proficiency Success x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 2;
+                break;
+            case 10:
+                diceTextLog = diceTextLog + "(Success x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.SS + s2 + "Proficiency Success x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.success = diceResult.success + 2;
+                break;
+            case 11:
+                diceTextLog = diceTextLog + "(Advantage x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.AA + s2 + "Proficiency Advantage x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.advantage = diceResult.advantage + 2;
+                break;
+            case 12:
+                diceTextLog = diceTextLog + "(Advantage x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.PROFICIENCY.AA + s2 + "Proficiency Advantage x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.advantage = diceResult.advantage + 2;
+                break;
+        }
 	}
-	if (eedGlobal.diceLogChat === true) {
+	if (eedGlobal.diceLogChat === true && eedGlobal.diceLogOnOneLine === false) {
 		if (eedGlobal.diceGraphicsChat === true && eedGlobal.diceLogChatWhisper === false) {
 			sendChat("", "/direct " + diceGraphicsLog);
 		}
@@ -419,7 +423,7 @@ function rollProficiency(diceQty, who){
 			}
 		}
 	}
-	return diceResult;
+	return [diceResult, diceTextLog, diceGraphicsLog];
 }
 
 function rollSetBack(diceQty, who){
@@ -455,45 +459,45 @@ function rollSetBack(diceQty, who){
 	}
 	
 	for (i=1;i<=diceQty;i++) {
-	if (eedGlobal.diceTestEnabled === true) {
-		roll = roll + 1;
+        if (eedGlobal.diceTestEnabled === true) {
+            roll = roll + 1;
+        }
+        else {
+            roll = randomInteger(6);
+        }
+        
+        switch(roll) {
+            case 1:
+                diceTextLog = diceTextLog + "(Blank)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.BLANK + s2 + "Setback Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                break;
+            case 2:
+                diceTextLog = diceTextLog + "(Blank)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.BLANK + s2 + "Setback Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                break;
+            case 3:
+                diceTextLog = diceTextLog + "(Failure)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.F + s2 + "Setback Failure" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 1;
+                break;
+            case 4:
+                diceTextLog = diceTextLog + "(Failure)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.F + s2 + "Setback Failure" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 1;
+                break;
+            case 5:
+                diceTextLog = diceTextLog + "(Threat)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.T + s2 + "Setback Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.threat = diceResult.threat + 1;
+                break;
+            case 6:
+                diceTextLog = diceTextLog + "(Threat)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.T + s2 + "Setback Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.threat = diceResult.threat + 1;
+                break;
+        }
 	}
-	else {
-		roll = randomInteger(6);
-	}
-	
-	switch(roll) {
-        case 1:
-			diceTextLog = diceTextLog + "(Blank)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.BLANK + s2 + "Setback Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			break;
-		case 2:
-			diceTextLog = diceTextLog + "(Blank)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.BLANK + s2 + "Setback Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			break;
-		case 3:
-			diceTextLog = diceTextLog + "(Failure)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.F + s2 + "Setback Failure" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 1;
-			break;
-		case 4:
-			diceTextLog = diceTextLog + "(Failure)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.F + s2 + "Setback Failure" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 1;
-			break;
-		case 5:
-			diceTextLog = diceTextLog + "(Threat)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.T + s2 + "Setback Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.threat = diceResult.threat + 1;
-			break;
-		case 6:
-			diceTextLog = diceTextLog + "(Threat)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.SETBACK.T + s2 + "Setback Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.threat = diceResult.threat + 1;
-			break;
-    }
-	}
-	if (eedGlobal.diceLogChat === true) {
+	if (eedGlobal.diceLogChat === true && eedGlobal.diceLogOnOneLine === false) {
 		if (eedGlobal.diceGraphicsChat === true && eedGlobal.diceLogChatWhisper === false) {
 			sendChat("", "/direct " + diceGraphicsLog);
 		}
@@ -507,7 +511,7 @@ function rollSetBack(diceQty, who){
 			}
 		}
 	}
-	return diceResult;
+	return [diceResult, diceTextLog, diceGraphicsLog];
 }
 
 function rollDifficulty(diceQty, who){
@@ -545,57 +549,58 @@ function rollDifficulty(diceQty, who){
 	}
 	
 	for (i=1;i<=diceQty;i++) {
-	if (eedGlobal.diceTestEnabled === true) {
-		roll = roll + 1;
-	}
-	else {
-		roll = randomInteger(8);
-	}
+        if (eedGlobal.diceTestEnabled === true) {
+            roll = roll + 1;
+        }
+        else {
+            roll = randomInteger(8);
+        }
 
-	switch(roll) {
-        case 1:
-			diceTextLog = diceTextLog + "(Blank)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.BLANK + s2 + "Difficulty Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			break;
-		case 2:
-			diceTextLog = diceTextLog + "(Failure)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.F + s2 + "Difficulty Failure" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 1;
-			break;
-		case 3:
-			diceTextLog = diceTextLog + "(Threat)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.T + s2 + "Difficulty Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.threat = diceResult.threat + 1;
-			break;
-		case 4:
-			diceTextLog = diceTextLog + "(Threat)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.T + s2 + "Difficulty Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.threat = diceResult.threat + 1;
-			break;
-		case 5:
-			diceTextLog = diceTextLog + "(Threat)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.T + s2 + "Difficulty Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.threat = diceResult.threat + 1;
-			break;
-		case 6:
-			diceTextLog = diceTextLog + "(Failure x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.FF + s2 + "Difficulty Failure x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 2;
-			break;
-		case 7:
-			diceTextLog = diceTextLog + "(Failure + Threat)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.FT + s2 + "Difficulty Failure + Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 1;
-			diceResult.threat = diceResult.threat + 1;
-			break;
-		case 8:
-			diceTextLog = diceTextLog + "(Threat x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.TT + s2 + "Difficulty Threat x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.threat = diceResult.threat + 2;
-			break;
+        switch(roll) {
+            case 1:
+                diceTextLog = diceTextLog + "(Blank)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.BLANK + s2 + "Difficulty Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                break;
+            case 2:
+                diceTextLog = diceTextLog + "(Failure)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.F + s2 + "Difficulty Failure" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 1;
+                break;
+            case 3:
+                diceTextLog = diceTextLog + "(Threat)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.T + s2 + "Difficulty Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.threat = diceResult.threat + 1;
+                break;
+            case 4:
+                diceTextLog = diceTextLog + "(Threat)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.T + s2 + "Difficulty Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.threat = diceResult.threat + 1;
+                break;
+            case 5:
+                diceTextLog = diceTextLog + "(Threat)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.T + s2 + "Difficulty Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.threat = diceResult.threat + 1;
+                break;
+            case 6:
+                diceTextLog = diceTextLog + "(Failure x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.FF + s2 + "Difficulty Failure x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 2;
+                break;
+            case 7:
+                diceTextLog = diceTextLog + "(Failure + Threat)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.FT + s2 + "Difficulty Failure + Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 1;
+                diceResult.threat = diceResult.threat + 1;
+                break;
+            case 8:
+                diceTextLog = diceTextLog + "(Threat x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.DIFFICULTY.TT + s2 + "Difficulty Threat x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.threat = diceResult.threat + 2;
+                break;
+        }
     }
-	}
-	if (eedGlobal.diceLogChat === true) {
+
+	if (eedGlobal.diceLogChat === true && eedGlobal.diceLogOnOneLine === false) {
 		if (eedGlobal.diceGraphicsChat === true && eedGlobal.diceLogChatWhisper === false) {
 			sendChat("", "/direct " + diceGraphicsLog);
 		}
@@ -609,7 +614,7 @@ function rollDifficulty(diceQty, who){
 			}
 		}
 	}
-	return diceResult;
+	return [diceResult, diceTextLog, diceGraphicsLog];
 }
 
 function rollChallenge(diceQty, who){
@@ -651,78 +656,79 @@ function rollChallenge(diceQty, who){
 	}
 	
 	for (i=1;i<=diceQty;i++) {
-	if (eedGlobal.diceTestEnabled === true) {
-		roll = roll + 1;
-	}
-	else {
-		roll = randomInteger(12);
+        if (eedGlobal.diceTestEnabled === true) {
+            roll = roll + 1;
+        }
+        else {
+            roll = randomInteger(12);
+        }
+
+        switch(roll) {
+            case 1:
+                diceTextLog = diceTextLog + "(Blank)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.BLANK + s2 + "Challenge Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                break;
+            case 2:
+                diceTextLog = diceTextLog + "(Despair)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.DESPAIR + s2 + "Challenge Despair" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.despair = diceResult.despair + 1;
+                break;
+            case 3:
+                diceTextLog = diceTextLog + "(Failure)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.F + s2 + "Challenge Failure" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 1;
+                break;
+            case 4:
+                diceTextLog = diceTextLog + "(Failure)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.F + s2 + "Challenge Failure" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 1;
+                break;
+            case 5:
+                diceTextLog = diceTextLog + "(Threat)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.T + s2 + "Challenge Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.threat = diceResult.threat + 1;
+                break;
+            case 6:
+                diceTextLog = diceTextLog + "(Threat)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.T + s2 + "Challenge Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.threat = diceResult.threat + 1;
+                break;
+            case 7:
+                diceTextLog = diceTextLog + "(Failure x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.FF + s2 + "Challenge Failure x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 2;
+                break;
+            case 8:
+                diceTextLog = diceTextLog + "(Failure x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.FF + s2 + "Challenge Failure x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 2;
+                break;
+            case 9:
+                diceTextLog = diceTextLog + "(Threat x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.TT + s2 + "Challenge Threat x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.threat = diceResult.threat + 2;
+                break;
+            case 10:
+                diceTextLog = diceTextLog + "(Threat x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.TT + s2 + "Challenge Threat x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.threat = diceResult.threat + 2;
+                break;
+            case 11:
+                diceTextLog = diceTextLog + "(Failure + Threat)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.FT + s2 + "Challenge Failure + Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 1;
+                diceResult.threat = diceResult.threat + 1;
+                break;
+            case 12:
+                diceTextLog = diceTextLog + "(Failure + Threat)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.FT + s2 + "Challenge Failure + Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.failure = diceResult.failure + 1;
+                diceResult.threat = diceResult.threat + 1;
+                break;
+        }
 	}
 
-	switch(roll) {
-        case 1:
-			diceTextLog = diceTextLog + "(Blank)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.BLANK + s2 + "Challenge Blank" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			break;
-		case 2:
-			diceTextLog = diceTextLog + "(Despair)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.DESPAIR + s2 + "Challenge Despair" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.despair = diceResult.despair + 1;
-			break;
-		case 3:
-			diceTextLog = diceTextLog + "(Failure)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.F + s2 + "Challenge Failure" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 1;
-			break;
-		case 4:
-			diceTextLog = diceTextLog + "(Failure)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.F + s2 + "Challenge Failure" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 1;
-			break;
-		case 5:
-			diceTextLog = diceTextLog + "(Threat)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.T + s2 + "Challenge Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.threat = diceResult.threat + 1;
-			break;
-		case 6:
-			diceTextLog = diceTextLog + "(Threat)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.T + s2 + "Challenge Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.threat = diceResult.threat + 1;
-			break;
-		case 7:
-			diceTextLog = diceTextLog + "(Failure x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.FF + s2 + "Challenge Failure x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 2;
-			break;
-		case 8:
-			diceTextLog = diceTextLog + "(Failure x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.FF + s2 + "Challenge Failure x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 2;
-			break;
-		case 9:
-			diceTextLog = diceTextLog + "(Threat x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.TT + s2 + "Challenge Threat x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.threat = diceResult.threat + 2;
-			break;
-		case 10:
-			diceTextLog = diceTextLog + "(Threat x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.TT + s2 + "Challenge Threat x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.threat = diceResult.threat + 2;
-			break;
-		case 11:
-			diceTextLog = diceTextLog + "(Failure + Threat)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.FT + s2 + "Challenge Failure + Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 1;
-			diceResult.threat = diceResult.threat + 1;
-			break;
-		case 12:
-			diceTextLog = diceTextLog + "(Failure + Threat)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.CHALLENGE.FT + s2 + "Challenge Failure + Threat" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.failure = diceResult.failure + 1;
-			diceResult.threat = diceResult.threat + 1;
-			break;
-    }
-	}
-	if (eedGlobal.diceLogChat === true) {
+	if (eedGlobal.diceLogChat === true && eedGlobal.diceLogOnOneLine === false) {
 		if (eedGlobal.diceGraphicsChat === true && eedGlobal.diceLogChatWhisper === false) {
 			sendChat("", "/direct " + diceGraphicsLog);
 		}
@@ -736,7 +742,7 @@ function rollChallenge(diceQty, who){
 			}
 		}
 	}
-	return diceResult;
+	return [diceResult, diceTextLog, diceGraphicsLog];
 }
 
 function rollForce(diceQty, who){
@@ -778,77 +784,78 @@ function rollForce(diceQty, who){
 	}
 	
 	for (i=1;i<=diceQty;i++) {
-	if (eedGlobal.diceTestEnabled === true) {
-		roll = roll + 1;
-	}
-	else {
-		roll = randomInteger(12);
+        if (eedGlobal.diceTestEnabled === true) {
+            roll = roll + 1;
+        }
+        else {
+            roll = randomInteger(12);
+        }
+
+        switch(roll) {
+            case 1:
+                diceTextLog = diceTextLog + "(Light)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.L + s2 + "Force Light" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.light = diceResult.light + 1;
+                break;
+            case 2:
+                diceTextLog = diceTextLog + "(Light)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.L + s2 + "Force Light" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.light = diceResult.light + 1;
+                break;
+            case 3:
+                diceTextLog = diceTextLog + "(Light x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.LL + s2 + "Force Light x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.light = diceResult.light + 2;
+                break;
+            case 4:
+                diceTextLog = diceTextLog + "(Light x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.LL + s2 + "Force Light x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.light = diceResult.light + 2;
+                break;
+            case 5:
+                diceTextLog = diceTextLog + "(Light x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.LL + s2 + "Force Light x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.light = diceResult.light + 2;
+                break;
+            case 6:
+                diceTextLog = diceTextLog + "(Dark)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.dark = diceResult.dark + 1;
+                break;
+            case 7:
+                diceTextLog = diceTextLog + "(Dark)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.dark = diceResult.dark + 1;
+                break;
+            case 8:
+                diceTextLog = diceTextLog + "(Dark)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.dark = diceResult.dark + 1;
+                break;
+            case 9:
+                diceTextLog = diceTextLog + "(Dark)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.dark = diceResult.dark + 1;
+                break;
+            case 10:
+                diceTextLog = diceTextLog + "(Dark)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.dark = diceResult.dark + 1;
+                break;
+            case 11:
+                diceTextLog = diceTextLog + "(Dark)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.dark = diceResult.dark + 1;
+                break;
+            case 12:
+                diceTextLog = diceTextLog + "(Dark x2)";
+                diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.DD + s2 + "Force Dark x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
+                diceResult.dark = diceResult.dark + 2;
+                break;
+        }
 	}
 
-	switch(roll) {
-        case 1:
-			diceTextLog = diceTextLog + "(Light)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.L + s2 + "Force Light" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.light = diceResult.light + 1;
-			break;
-		case 2:
-			diceTextLog = diceTextLog + "(Light)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.L + s2 + "Force Light" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.light = diceResult.light + 1;
-			break;
-		case 3:
-			diceTextLog = diceTextLog + "(Light x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.LL + s2 + "Force Light x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.light = diceResult.light + 2;
-			break;
-		case 4:
-			diceTextLog = diceTextLog + "(Light x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.LL + s2 + "Force Light x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.light = diceResult.light + 2;
-			break;
-		case 5:
-			diceTextLog = diceTextLog + "(Light x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.LL + s2 + "Force Light x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.light = diceResult.light + 2;
-			break;
-		case 6:
-			diceTextLog = diceTextLog + "(Dark)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.dark = diceResult.dark + 1;
-			break;
-		case 7:
-			diceTextLog = diceTextLog + "(Dark)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.dark = diceResult.dark + 1;
-			break;
-		case 8:
-			diceTextLog = diceTextLog + "(Dark)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.dark = diceResult.dark + 1;
-			break;
-		case 9:
-			diceTextLog = diceTextLog + "(Dark)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.dark = diceResult.dark + 1;
-			break;
-		case 10:
-			diceTextLog = diceTextLog + "(Dark)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.dark = diceResult.dark + 1;
-			break;
-		case 11:
-			diceTextLog = diceTextLog + "(Dark)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.D + s2 + "Force Dark" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.dark = diceResult.dark + 1;
-			break;
-		case 12:
-			diceTextLog = diceTextLog + "(Dark x2)";
-			diceGraphicsLog = diceGraphicsLog + s1 + eedCONSTANTS.FORCE.DD + s2 + "Force Dark x2" + s3 + eedGlobal.diceGraphicsChatSize + s4 + eedGlobal.diceGraphicsChatSize + s5;
-			diceResult.dark = diceResult.dark + 2;
-			break;
-    }
-	}
-	if (eedGlobal.diceLogChat === true) {
+	if (eedGlobal.diceLogChat === true && eedGlobal.diceLogOnOneLine === false) {
 		if (eedGlobal.diceGraphicsChat === true && eedGlobal.diceLogChatWhisper === false) {
 			sendChat("", "/direct " + diceGraphicsLog);
 		}
@@ -862,7 +869,7 @@ function rollForce(diceQty, who){
 			}
 		}
 	}
-	return diceResult;
+	return [diceResult, diceTextLog, diceGraphicsLog];
 }
 
 
@@ -929,12 +936,14 @@ function processEdgeEmpireDiceScript(diceToRoll, who){
 	var i = 0;
 	var j = diceToRoll.length;
 	var diceTextResults = "";
+    var diceTextTotals = "";
 	var diceGraphicsResults = "";
 	var s1 = '<img src="';
 	var s2 = '" title="';
 	var s3 = '" height="';
 	var s4 = '" width="';
 	var s5 = '"/>';
+    var diceGraphicsTotals = "";
 	
 	if (eedGlobal.diceTestEnabled === true) {
 		sendChat("", "/desc " + who + ": 6b 8g 12y 6blk 8p 12r 12w");
@@ -952,42 +961,63 @@ function processEdgeEmpireDiceScript(diceToRoll, who){
 	// won't work with >9 dice of one colour yet!
 	for (i=0, j;i<j;i++){
 		diceQty = diceToRoll[i].substring(0,1);
-		diceColor=diceToRoll[i].substring(1);
-
+        diceColor=diceToRoll[i].substring(1);
+        
 		switch(diceColor) {
 		//Blue "Boost" die (d6)
 			case 'b':
-				diceTotals = diceAddition(diceTotals, rollBoost(diceQty,who));
+                myresults = rollBoost(diceQty, who);
+                diceTotals = diceAddition(diceTotals, myresults[0]);
+                diceTextTotals = myresults[1];
+                diceGraphicsTotals = myresults[2];
 				break;
 		//Green "Ability" die (d8)
 			case 'g':
-				diceTotals = diceAddition(diceTotals, rollAbility(diceQty, who));
+                myresults = rollAbility(diceQty, who);
+                diceTotals = diceAddition(diceTotals, myresults[0]);
+                diceTextTotals = diceTextTotals + myresults[1];
+                diceGraphicsTotals = diceGraphicsTotals + myresults[2];
 				break;
 		//Yellow "Proficiency" die (d12)
 			case 'y':
-				diceTotals = diceAddition(diceTotals, rollProficiency(diceQty, who));
+                myresults = rollProficiency(diceQty, who);
+                diceTotals = diceAddition(diceTotals, myresults[0]);
+                diceTextTotals = diceTextTotals + myresults[1];
+                diceGraphicsTotals = diceGraphicsTotals + myresults[2];
 				break;
 		//Black "Setback" die (d6)
 			case 'blk':
-				diceTotals = diceAddition(diceTotals, rollSetBack(diceQty, who));		
+                myresults = rollSetBack(diceQty, who);
+                diceTotals = diceAddition(diceTotals, myresults[0]);
+                diceTextTotals = diceTextTotals + myresults[1];
+                diceGraphicsTotals = diceGraphicsTotals + myresults[2];
 				break;
 		//Purple "Difficulty" die (d8)
 			case 'p':
-				diceTotals = diceAddition(diceTotals, rollDifficulty(diceQty, who));		
+                myresults = rollDifficulty(diceQty, who);
+                diceTotals = diceAddition(diceTotals, myresults[0]);
+                diceTextTotals = diceTextTotals + myresults[1];
+                diceGraphicsTotals = diceGraphicsTotals + myresults[2];
 				break;
 		//Red "Challenge" die (d12)
 			case 'r':
-				diceTotals = diceAddition(diceTotals, rollChallenge(diceQty, who));		
+                myresults = rollChallenge(diceQty, who);
+                diceTotals = diceAddition(diceTotals, myresults[0]);
+                diceTextTotals = diceTextTotals + myresults[1];
+                diceGraphicsTotals = diceGraphicsTotals + myresults[2];
 				break;
 		//White "Force" die (d12)
 			case 'w':
-				diceTotals = diceAddition(diceTotals, rollForce(diceQty, who));		
+                myresults = rollForce(diceQty, who);
+                diceTotals = diceAddition(diceTotals, myresults[0]);
+                diceTextTotals = diceTextTotals + myresults[1];
+                diceGraphicsTotals = diceGraphicsTotals + myresults[2];
 				break;
 		}
 	}
-
+    
 	diceTotals = diceTotalsSummed(diceTotals);
-
+    
     diceTextResults = diceTextResults + "[";
     if (diceTotals.success > 0) {
 		diceTextResults = diceTextResults + " Success:" + diceTotals.success;
@@ -1038,20 +1068,35 @@ function processEdgeEmpireDiceScript(diceToRoll, who){
 		}
 	}
 
-	    diceTextResults = diceTextResults + "]";
-		
+    diceTextResults = diceTextResults + "]";
+    
+    if (eedGlobal.diceLogChat === true && eedGlobal.diceLogOnOneLine === true) {
 		if (eedGlobal.diceGraphicsChat === true && eedGlobal.diceLogChatWhisper === false) {
-			sendChat("", "/direct Roll:" + diceGraphicsResults);
+			sendChat("", "/direct " + diceGraphicsTotals);
 		}
 		else {
 			if (eedGlobal.diceLogChatWhisper === true) {
-				sendChat("Roll:", "/w gm " + diceTextResults);
-				sendChat("Roll:", "/w " + who + " " + diceTextResults);
+				sendChat("Force", "/w gm " + diceTextTotals);
+				sendChat("Force", "/w " + who + " " + diceTextTotals);
 			}
 			else {
-				sendChat("Roll:", "/em " + diceTextResults);
+				sendChat("Force", diceTextTotals);
 			}
 		}
+    }
+
+    if (eedGlobal.diceGraphicsChat === true && eedGlobal.diceLogChatWhisper === false) {
+        sendChat("", "/direct Roll:" + diceGraphicsResults);
+    }
+    else {
+        if (eedGlobal.diceLogChatWhisper === true) {
+            sendChat("Roll:", "/w gm " + diceTextResults);
+            sendChat("Roll:", "/w " + who + " " + diceTextResults);
+        }
+        else {
+            sendChat("Roll:", "/em " + diceTextResults);
+        }
+    }
 }
 
 var processScriptTabs = function(argv, who) {
@@ -1061,6 +1106,7 @@ var processScriptTabs = function(argv, who) {
 	var tmpGraphicsChat = false;
 	
     var script = argv.shift();
+
     switch(script) {
     	case eedCONSTANTS.EEDCOMMAND:
 			switch(argv[0]) {
