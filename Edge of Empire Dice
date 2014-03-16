@@ -21,7 +21,7 @@
 // currently no error checking so you can break it if you type in unsupported arguments
 
 var eedCONSTANTS = {
-	EEDCOMMAND : "!eed",
+    EEDCOMMAND : "!eed",
 	GRAPHICSIZE : {
     	SMALL : 20,
 		MEDIUM : 30,
@@ -95,7 +95,7 @@ var eedGlobal = {
     diceLogChat : true,
 	diceLogChatWhisper : false,
 	diceGraphicsChat : true,
-	diceGraphicsChatSize : eedCONSTANTS.GRAPHICSIZE.MEDIUM,
+	diceGraphicsChatSize : eedCONSTANTS.GRAPHICSIZE.SMALL,
 	diceTextResult : "",
 	diceTextResultLog : "",
 	diceGraphicResult : "",
@@ -969,7 +969,7 @@ function processEdgeEmpireDiceScript(diceToRoll, who){
                 myresults = rollBoost(diceQty, who);
                 diceTotals = diceAddition(diceTotals, myresults[0]);
                 diceTextTotals = myresults[1];
-                diceGraphicsTotals = myresults[2];
+                diceGraphicsTotals = diceGraphicsTotals + myresults[2];
 				break;
 		//Green "Ability" die (d8)
 			case 'g':
